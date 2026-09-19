@@ -23,8 +23,7 @@ def _get_list_env(name: str, default: list[str]) -> list[str]:
 
 
 class Settings(BaseModel):
-    APP_NAME: str = "Budget Planner API"
-    API_PREFIX: str = "/api/v1"
+    APP_NAME: str = "Tezkor Xizmat API"
     SECRET_KEY: str = os.getenv("SECRET_KEY", "").strip()
     ALGORITHM: str = os.getenv("ALGORITHM", "HS256").strip()
     ACCESS_TOKEN_EXPIRE_MINUTES: int = _get_int_env("ACCESS_TOKEN_EXPIRE_MINUTES", 60)
@@ -36,7 +35,7 @@ class Settings(BaseModel):
     FIREBASE_SERVICE_ACCOUNT_BASE64: str = os.getenv("FIREBASE_SERVICE_ACCOUNT_BASE64", "").strip()
     CORS_ORIGINS: list[str] = _get_list_env(
         "CORS_ORIGINS",
-        ["http://localhost:5173", "http://127.0.0.1:5173", "https://budget-planner-seven-cyan.vercel.app"],
+        ["http://localhost:5173", "http://127.0.0.1:5173",],
     )
 
 

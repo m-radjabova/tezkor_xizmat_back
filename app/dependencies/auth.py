@@ -38,4 +38,6 @@ def get_current_user(
     user = db.get(User, parsed_user_id)
     if not user:
         raise credentials_error
+    if user.is_blocked:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="This account is blocked")
     return user
