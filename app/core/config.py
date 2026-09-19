@@ -35,7 +35,7 @@ class Settings(BaseModel):
     FIREBASE_SERVICE_ACCOUNT_BASE64: str = os.getenv("FIREBASE_SERVICE_ACCOUNT_BASE64", "").strip()
     CORS_ORIGINS: list[str] = _get_list_env(
         "CORS_ORIGINS",
-        ["http://localhost:5173", "http://127.0.0.1:5173",],
+        ["http://localhost:5173", "http://127.0.0.1:5173", "https://tezkor-xizmat.vercel.app"],
     )
 
 
