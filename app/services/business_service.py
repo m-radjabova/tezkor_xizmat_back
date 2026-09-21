@@ -5,6 +5,7 @@ from sqlalchemy import func, or_, select
 from sqlalchemy.orm import Session, joinedload
 
 from app.models.business import Business
+from app.models.category import Category
 from app.models.enums import UserRole
 from app.models.review import Review
 from app.models.user import User
@@ -56,18 +57,49 @@ def list_public_businesses(
     latitude: float | None = None,
     longitude: float | None = None,
     sort_by: str = "newest",
+    min_rating: float | None = None,
 ) -> list[Business]:
-    statement = _business_query().where(Business.is_verified.is_(True))
+    review_stats = (
+        select(
+            Review.business_id.label("business_id"),
+            func.avg(Review.rating).label("rating_average"),
+            func.count(Review.id).label("rating_count"),
+        )
+        .where(Review.is_approved.is_(True))
+        .group_by(Review.business_id)
+        .subquery()
+    )
+
+    statement = (
+        _business_query()
+        .outerjoin(review_stats, review_stats.c.business_id == Business.id)
+        .where(Business.is_verified.is_(True))
+    )
     if category_id:
         statement = statement.where(Business.category_id == category_id)
     if search:
         search_text = f"%{search}%"
-        statement = statement.where(or_(Business.name.ilike(search_text), Business.address.ilike(search_text)))
+        statement = statement.join(Category, Business.category_id == Category.id).where(
+            or_(
+                Business.name.ilike(search_text),
+                Business.address.ilike(search_text),
+                Business.description.ilike(search_text),
+                Category.name.ilike(search_text),
+            )
+        )
+    if min_rating is not None:
+        statement = statement.where(func.coalesce(review_stats.c.rating_average, 0) >= min_rating)
     if sort_by == "distance" and latitude is not None and longitude is not None:
         distance = (Business.latitude - latitude) * (Business.latitude - latitude) + (
             Business.longitude - longitude
         ) * (Business.longitude - longitude)
         statement = statement.order_by(distance.asc(), Business.created_at.desc())
+    elif sort_by == "rating":
+        statement = statement.order_by(
+            func.coalesce(review_stats.c.rating_average, 0).desc(),
+            func.coalesce(review_stats.c.rating_count, 0).desc(),
+            Business.created_at.desc(),
+        )
     else:
         statement = statement.order_by(Business.created_at.desc())
     statement = statement.limit(limit).offset(offset)

@@ -312,6 +312,43 @@ def seed_businesses_and_reviews(db, categories, provider, customers):
             "https://images.unsplash.com/photo-1566454825481-4e48f80aa4d7?w=300",
             ["https://images.unsplash.com/photo-1516627145497-ae6968895b74?w=900", "https://images.unsplash.com/photo-1596464716127-f2a82984de30?w=900"]
         ),
+        # --- Yangi qo'shilgan 4 ta Avto servis ---
+        (
+            "Bukhara Auto Tuning", "Avto servis", "Buxoro sh., M. Iqbol ko'chasi 12", 39.7640, 64.4315, "09:00", "20:00", 
+            "Avtomobillar uchun tuning, shumoizolyatsiya va tonirovka xizmati.",
+            "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=300",
+            ["https://images.unsplash.com/photo-1617814076367-b759c7d7e738?w=900", "https://images.unsplash.com/photo-1486006920555-c77dce18193b?w=900"]
+        ),
+        (
+            "Profi Diagnostic Auto", "Avto servis", "Buxoro sh., Sanoat hududi 18-bino", 39.7405, 64.4532, "08:30", "19:00", 
+            "Kompyuter diagnostikasi, injektor tozalash va elektrik xizmatlari.",
+            "https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=300",
+            ["https://images.unsplash.com/photo-1621905251189-08b45d6a269e?w=900", "https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=900"]
+        ),
+        (
+            "Moyalmashtirish va Shinomontaj 24/7", "Avto servis", "Buxoro sh., Gazli shoh ko'chasi 22", 39.7845, 64.4065, "00:00", "23:59", 
+            "Tun-u kun ishlaydigan moy almashtirish va shinomontaj shahobchasi.",
+            "https://images.unsplash.com/photo-1578844251758-2f71da64c96f?w=300",
+            ["https://images.unsplash.com/photo-1520340356584-f9917d1eea6f?w=900", "https://images.unsplash.com/photo-1607860108855-64acf2078ed9?w=900"]
+        ),
+        (
+            "Bukhara Auto Kuzov", "Avto servis", "Buxoro sh., K. Murtazoyev ko'chasi 89", 39.7612, 64.4398, "09:00", "18:00", 
+            "Kuzov ta'mirlash, boyash va polirovka xizmati.",
+            "https://images.unsplash.com/photo-1613214149922-f1809c99b414?w=300",
+            ["https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=900", "https://images.unsplash.com/photo-1486006920555-c77dce18193b?w=900"]
+        ),
+        (
+            "Bukhara Auto Elektrik", "Avto servis", "Buxoro sh., Alpomish ko'chasi 55", 39.7595, 64.4405, "09:00", "19:00", 
+            "Avtomobil elektrikasi, batareya almashtirish va starter ta'mirlash.",
+            "https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=300",
+            ["https://images.unsplash.com/photo-1621905251189-08b45d6a269e?w=900", "https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=900"]
+        ),
+        (
+            "Bukhara Auto Klimat", "Avto servis", "Buxoro sh., Mustaqillik ko'chasi 33", 39.7685, 64.4325, "09:00", "18:30", 
+            "Konditsioner ta'mirlash, gaz to'ldirish va dezinfeksiya xizmati.",
+            "https://images.unsplash.com/photo-1613214149922-f1809c99b414?w=300",
+            ["https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=900", "https://images.unsplash.com/photo-1486006920555-c77dce18193b?w=900"]
+        )
     ]
 
     cat_map = {cat.name: cat.id for cat in categories}
@@ -344,7 +381,7 @@ def seed_businesses_and_reviews(db, categories, provider, customers):
     for biz in created_businesses:
         db.refresh(biz)
 
-    # 30 ta sharh (Review) generatsiya qilish
+    # 34 ta sharh (Review) generatsiya qilish
     comments = [
         "Juda yaxshi xizmat, tavsiya qilaman!",
         "Xodimlar xushmuomala, narxlar ham hamyonbop.",
@@ -358,7 +395,7 @@ def seed_businesses_and_reviews(db, categories, provider, customers):
         "A'lo sifat, hammaga maslahat beraman!",
     ]
 
-    for i in range(30):
+    for i in range(len(created_businesses)):
         target_business = created_businesses[i % len(created_businesses)]
         random_customer = random.choice(customers)
         rating = random.choice([4, 5, 5, 5, 3])
@@ -389,8 +426,8 @@ def main():
 
         print("\n--- MUVAFFAQIYATLI YARATILDI ---")
         print(f"Categories: {len(categories)} ta")
-        print("Businesses: 30 ta (Buxoro manzillari bilan)")
-        print("Reviews: 30 ta")
+        print("Businesses: 34 ta (Buxoro manzillari bilan)")
+        print("Reviews: 34 ta")
         print("-------------------------------")
         print(f"Admin: {ADMIN_EMAIL} / {ADMIN_PASSWORD}")
         print(f"Provider: {PROVIDER_EMAIL} / {PROVIDER_PASSWORD}")

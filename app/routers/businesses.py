@@ -39,12 +39,13 @@ def get_public_businesses(
     search: str | None = Query(default=None, min_length=2, max_length=100),
     latitude: float | None = Query(default=None, ge=-90, le=90),
     longitude: float | None = Query(default=None, ge=-180, le=180),
-    sort_by: str = Query(default="newest", pattern="^(newest|distance)$"),
+    sort_by: str = Query(default="newest", pattern="^(newest|distance|rating)$"),
+    min_rating: float | None = Query(default=None, ge=1, le=5),
     limit: int = Query(default=8, ge=1, le=50),
     offset: int = Query(default=0, ge=0),
     db: Session = Depends(get_db),
 ):
-    return list_public_businesses(db, category_id, search, limit, offset, latitude, longitude, sort_by)
+    return list_public_businesses(db, category_id, search, limit, offset, latitude, longitude, sort_by, min_rating)
 
 
 @router.get("/my", response_model=list[BusinessRead])
